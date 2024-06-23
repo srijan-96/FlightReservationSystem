@@ -22,7 +22,6 @@ public class AirlineService
 	{
 		airlineRepository.saveAirlines(airline);
 		return new Response<>(ResponseStatusCode.SUCCESS, "Airline added successfully", null);
-
 	}
 
 	public Response addSeats(long airlineId, List<Seat> seats)

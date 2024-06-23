@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +35,11 @@ public class AirlineController
 	@CrossOrigin
 	@RequestMapping(value = "/details", method = RequestMethod.POST)
 	public ResponseEntity<Response> addAirline(
+		@Valid
 		@RequestBody
 		Airline airline)
 	{
-		Response response = null;
+		Response response;
 		try
 		{
 			response = airlineService.saveAirlines(airline);
@@ -53,10 +56,11 @@ public class AirlineController
 	@RequestMapping(value = "/{airlineId}/seats", method = RequestMethod.POST)
 	public ResponseEntity<Response> addSeats(@PathVariable("airlineId")
 	long airlineId,
+		@Valid
 		@RequestBody
 		List<Seat> seatList)
 	{
-		Response response = null;
+		Response response;
 		try
 		{
 			response = airlineService.addSeats(airlineId, seatList);
@@ -74,7 +78,7 @@ public class AirlineController
 	public ResponseEntity<Response> getAirline(@PathVariable("airlineCode")
 	String airlineCode)
 	{
-		Response response = null;
+		Response response;
 		try
 		{
 			AirlineView airlineView = airlineService.getAirlineView(airlineCode);
@@ -82,8 +86,6 @@ public class AirlineController
 				response = new Response<>(ResponseStatusCode.SUCCESS, "Fetch Success - Record not found", airlineView);
 			else
 				response = new Response<>(ResponseStatusCode.SUCCESS, "Fetch Success", airlineView);
-
-
 		}
 		catch(Exception e)
 		{

@@ -14,5 +14,5 @@ public class FlightScheduleView extends FlightSchedule
 	private AirlineView airline;
 	private Airport source;
 	private Airport destination;
-	private JsonNode seatPricing;
+	private SeatPricing seatPricing;
 }

@@ -5,6 +5,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
+import javax.validation.constraints.NotNull;
 
 import com.project.FlightReservation.domain.dao.enums.FlightStatus;
 
@@ -17,9 +20,11 @@ public class FlightSchedule
 	private long airlineId;
 	private long toAirport;
 	private long fromAirport;
-	private LocalDateTime departureDatetime;
-	private LocalDateTime arrivalDatetime;
+	@NotNull(message = "Flight departure time cannot be empty")
+	private OffsetDateTime departureDatetime;
+	@NotNull(message = "Flight arrival time cannot be empty")
+	private OffsetDateTime arrivalDatetime;
 	private FlightStatus status;
+	@NotNull(message = "Flight base price cannot be empty")
 	private String basePrice;
-	private long seatPricingId;
 }

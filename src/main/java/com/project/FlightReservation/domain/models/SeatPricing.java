@@ -12,5 +12,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class SeatPricing
 {
 	private long seatPricingId;
-	private JsonNode prices;
+	private long flightScheduleId;
+	private String businessPrice;
+	private String economyPrice;
+	private String firstClassPrice;
 }
