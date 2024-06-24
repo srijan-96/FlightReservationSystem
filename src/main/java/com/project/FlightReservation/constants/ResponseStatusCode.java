@@ -3,15 +3,10 @@ package com.project.FlightReservation.constants;
 public enum ResponseStatusCode
 {
 
-	SUCCESS_NO_ACTION_NEEDED(2),
-
 	SUCCESS(1),
 
-	SUCCESS_NO_ACTION_PERFORMED(0),
 
-	ERROR(-1),
-
-	ERROR_INVALID_DATA(-2);
+	ERROR(-1);
 
 	private int value;
 

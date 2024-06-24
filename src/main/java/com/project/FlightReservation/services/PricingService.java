@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.FlightReservation.constants.ResponseStatusCode;
 import com.project.FlightReservation.domain.models.Response;
-import com.project.FlightReservation.domain.models.SeatPricing;
+import com.project.FlightReservation.domain.models.schedule.SeatPricing;
 import com.project.FlightReservation.domain.repository.PricingRepository;
 
 @Service

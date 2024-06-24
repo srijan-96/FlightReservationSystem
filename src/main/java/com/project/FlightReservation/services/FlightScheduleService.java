@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 import com.project.FlightReservation.constants.FlightScheduleFrequencyType;
 import com.project.FlightReservation.constants.ResponseStatusCode;
 import com.project.FlightReservation.domain.dao.enums.FlightStatus;
-import com.project.FlightReservation.domain.models.FlightScheduleRequest;
-import com.project.FlightReservation.domain.models.FlightScheduleView;
+import com.project.FlightReservation.domain.models.schedule.FlightScheduleRequest;
+import com.project.FlightReservation.domain.models.schedule.FlightScheduleView;
 import com.project.FlightReservation.domain.models.Response;
+import com.project.FlightReservation.domain.models.airline.Seat;
 import com.project.FlightReservation.domain.repository.FlightScheduleRepository;
 import com.project.FlightReservation.exceptions.InvalidPayloadException;
 
@@ -35,27 +36,32 @@ public class FlightScheduleService
 		if(currentDate.isBefore(OffsetDateTime.now()))
 			throw new InvalidPayloadException("Departure datetime is in the past - Not allowed");
 
-		while(!currentDate.isAfter(endDate))
+		if(flightScheduleRequest.getFlightScheduleFrequencyType() == FlightScheduleFrequencyType.NA)
 		{
-			if(flightScheduleRequest.getFlightScheduleFrequencyType() == FlightScheduleFrequencyType.DAILY)
+			flightScheduleRequest.setStatus(FlightStatus.SCHEDULED);
+			flightScheduleList.add(flightScheduleRequest);
+		}
+		else
+		{
+			if(currentDate.isAfter(endDate))
+				throw new InvalidPayloadException("End date cannot be before current date");
+			while(!currentDate.isAfter(endDate))
 			{
-				addDailySchedule(flightScheduleList, flightScheduleRequest, currentDate);
-				currentDate = currentDate.plusDays(1);
-			}
-			else if(flightScheduleRequest.getFlightScheduleFrequencyType() == FlightScheduleFrequencyType.WEEKLY)
-			{
-				if(flightScheduleRequest.getDaysOFWeek().contains(currentDate.getDayOfWeek().name()))
+				if(flightScheduleRequest.getFlightScheduleFrequencyType() == FlightScheduleFrequencyType.DAILY)
 				{
 					addDailySchedule(flightScheduleList, flightScheduleRequest, currentDate);
+					currentDate = currentDate.plusDays(1);
 				}
-				currentDate = currentDate.plusDays(1);
+				else if(flightScheduleRequest.getFlightScheduleFrequencyType() == FlightScheduleFrequencyType.WEEKLY)
+				{
+					if(flightScheduleRequest.getDaysOFWeek().contains(currentDate.getDayOfWeek().name()))
+					{
+						addDailySchedule(flightScheduleList, flightScheduleRequest, currentDate);
+					}
+					currentDate = currentDate.plusDays(1);
+				}
 			}
-			else if(flightScheduleRequest.getFlightScheduleFrequencyType() == FlightScheduleFrequencyType.NA)
 
-			{
-				flightScheduleRequest.setStatus(FlightStatus.SCHEDULED);
-				flightScheduleList.add(flightScheduleRequest);
-			}
 		}
 		flightScheduleRepository.createSchedule(flightScheduleList);
 		return new Response<>(ResponseStatusCode.SUCCESS, "Flight schedules added successfully", null);
@@ -77,6 +83,11 @@ public class FlightScheduleService
 	public List<FlightScheduleView> getFlightSchedules(Optional<String> sourceAirportCode, Optional<String> destinationAirportCode, Optional<OffsetDateTime> departureDate, Optional<String> airlineName, Optional<String> minPrice, Optional<String> maxPrice, int offset, int limit)
 	{
 		return flightScheduleRepository.fetchFlightScheduleView(sourceAirportCode, destinationAirportCode, departureDate, airlineName, minPrice, maxPrice, offset, limit);
+	}
+
+	public List<Seat> getAvailableSeats(long flightScheduleId)
+	{
+		return flightScheduleRepository.getAvailableSeats(flightScheduleId);
 	}
 
 }

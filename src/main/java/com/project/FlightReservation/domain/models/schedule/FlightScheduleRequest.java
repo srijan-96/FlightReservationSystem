@@ -1,4 +1,4 @@
-package com.project.FlightReservation.domain.models;
+package com.project.FlightReservation.domain.models.schedule;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +10,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.project.FlightReservation.constants.FlightScheduleFrequencyType;
+
 @Setter
 @Getter
 @ToString

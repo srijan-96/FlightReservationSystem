@@ -13,16 +13,15 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
-import org.jooq.Table;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.FlightReservation.domain.dao.enums.SeatType;
 import com.project.FlightReservation.domain.dao.tables.records.SeatsRecord;
-import com.project.FlightReservation.domain.models.Airline;
-import com.project.FlightReservation.domain.models.AirlineView;
-import com.project.FlightReservation.domain.models.Seat;
+import com.project.FlightReservation.domain.models.airline.Airline;
+import com.project.FlightReservation.domain.models.airline.AirlineView;
+import com.project.FlightReservation.domain.models.airline.Seat;
 
 @Repository
 public class AirlineRepository

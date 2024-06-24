@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.FlightReservation.constants.ResponseStatusCode;
-import com.project.FlightReservation.domain.models.Airline;
-import com.project.FlightReservation.domain.models.AirlineView;
+import com.project.FlightReservation.domain.models.airline.Airline;
+import com.project.FlightReservation.domain.models.airline.AirlineView;
 import com.project.FlightReservation.domain.models.Response;
-import com.project.FlightReservation.domain.models.Seat;
+import com.project.FlightReservation.domain.models.airline.Seat;
 import com.project.FlightReservation.domain.repository.AirlineRepository;
 
 @Service
@@ -21,7 +21,7 @@ public class AirlineService
 	public Response saveAirlines(Airline airline)
 	{
 		airlineRepository.saveAirlines(airline);
-		return new Response<>(ResponseStatusCode.SUCCESS, "Airline added successfully", null);
+		return new Response<>(ResponseStatusCode.SUCCESS, "Airline added/updated successfully", null);
 	}
 
 	public Response addSeats(long airlineId, List<Seat> seats)

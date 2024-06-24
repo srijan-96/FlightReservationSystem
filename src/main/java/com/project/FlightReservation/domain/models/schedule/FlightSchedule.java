@@ -1,10 +1,9 @@
-package com.project.FlightReservation.domain.models;
+package com.project.FlightReservation.domain.models.schedule;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import javax.validation.constraints.NotNull;

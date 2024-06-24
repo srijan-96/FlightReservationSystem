@@ -2,7 +2,9 @@ package com.project.FlightReservation.domain.repository;
 
 import static com.project.FlightReservation.domain.dao.Tables.AIRLINES;
 import static com.project.FlightReservation.domain.dao.Tables.AIRPORT;
+import static com.project.FlightReservation.domain.dao.Tables.BOOKINGS;
 import static com.project.FlightReservation.domain.dao.Tables.FLIGHT_SCHEDULE;
+import static com.project.FlightReservation.domain.dao.Tables.SEATS;
 import static com.project.FlightReservation.domain.dao.Tables.SEAT_PRICING;
 import static org.jooq.impl.DSL.day;
 import static org.jooq.impl.DSL.month;
@@ -24,11 +26,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.FlightReservation.domain.dao.tables.records.FlightScheduleRecord;
-import com.project.FlightReservation.domain.models.AirlineView;
-import com.project.FlightReservation.domain.models.Airport;
-import com.project.FlightReservation.domain.models.FlightScheduleRequest;
-import com.project.FlightReservation.domain.models.FlightScheduleView;
-import com.project.FlightReservation.domain.models.SeatPricing;
+import com.project.FlightReservation.domain.models.airline.AirlineView;
+import com.project.FlightReservation.domain.models.airline.Airport;
+import com.project.FlightReservation.domain.models.schedule.FlightScheduleRequest;
+import com.project.FlightReservation.domain.models.schedule.FlightScheduleView;
+import com.project.FlightReservation.domain.models.airline.Seat;
+import com.project.FlightReservation.domain.models.schedule.SeatPricing;
 
 @Repository
 public class FlightScheduleRepository
@@ -72,9 +75,7 @@ public class FlightScheduleRepository
 		List<Condition> condition = new ArrayList<>();
 
 		sourceAirportCode.ifPresent(s -> condition.add(AIRPORT.as("source").AIRPORT_CODE.eq(s)));
-
 		destinationAirportCode.ifPresent(s -> condition.add(AIRPORT.as("destination").AIRPORT_CODE.eq(s)));
-
 		if(departureDate.isPresent())
 		{
 			LocalDate date = departureDate.get().toLocalDate();
@@ -83,9 +84,7 @@ public class FlightScheduleRepository
 				.and(day(FLIGHT_SCHEDULE.DEPARTURE_DATETIME).eq(date.getDayOfMonth()))
 			);
 		}
-
 		airlineName.ifPresent(s -> condition.add(AIRLINES.NAME.equalIgnoreCase(s)));
-
 		if(minPrice.isPresent() && maxPrice.isPresent())
 		{
 			condition.add(FLIGHT_SCHEDULE.BASE_PRICE.between(minPrice.get(), maxPrice.get()));
@@ -132,6 +131,7 @@ public class FlightScheduleRepository
 		airlineView.setAirlineId(record.get(AIRLINES.AIRLINE_ID));
 		airlineView.setName(record.get(AIRLINES.NAME));
 		airlineView.setAirlineCode(record.get(AIRLINES.AIRLINE_CODE));
+
 		flightScheduleView.setAirline(airlineView);
 
 		Airport sourceAirport = record.into(AIRPORT.as("source")).into(Airport.class);
@@ -153,6 +153,17 @@ public class FlightScheduleRepository
 
 		return flightScheduleView;
 
+	}
+
+	public List<Seat> getAvailableSeats(long flightScheduleId)
+	{
+		return dsl.select(SEATS.fields()).from(SEATS).join(FLIGHT_SCHEDULE).
+			on(SEATS.AIRLINE_REF_ID.eq(FLIGHT_SCHEDULE.AIRLINE_ID)).
+			leftJoin(BOOKINGS).on(BOOKINGS.SEAT_ID.eq(SEATS.SEAT_ID)).
+			and(BOOKINGS.FLIGHT_ID.eq(FLIGHT_SCHEDULE.FLIGHT_SCHEDULE_ID)).
+			where(FLIGHT_SCHEDULE.FLIGHT_SCHEDULE_ID.eq(flightScheduleId)).
+			and(BOOKINGS.SEAT_ID.isNull()).
+			fetchInto(Seat.class);
 	}
 
 }

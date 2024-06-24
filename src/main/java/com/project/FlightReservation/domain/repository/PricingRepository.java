@@ -1,16 +1,13 @@
 package com.project.FlightReservation.domain.repository;
 
 import static com.project.FlightReservation.domain.dao.Tables.SEAT_PRICING;
-import static com.project.FlightReservation.domain.dao.tables.Airlines.AIRLINES;
 
-import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.project.FlightReservation.domain.models.Airline;
-import com.project.FlightReservation.domain.models.SeatPricing;
+import com.project.FlightReservation.domain.models.schedule.SeatPricing;
 
 @Repository
 public class PricingRepository

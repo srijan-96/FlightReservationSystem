@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.project.FlightReservation.constants.ResponseStatusCode;
-import com.project.FlightReservation.domain.models.Airline;
-import com.project.FlightReservation.domain.models.AirlineView;
+import com.project.FlightReservation.domain.models.airline.Airline;
+import com.project.FlightReservation.domain.models.airline.AirlineView;
 import com.project.FlightReservation.domain.models.Response;
-import com.project.FlightReservation.domain.models.Seat;
+import com.project.FlightReservation.domain.models.airline.Seat;
 import com.project.FlightReservation.services.AirlineService;
 
 @Controller
@@ -42,12 +42,38 @@ public class AirlineController
 		Response response;
 		try
 		{
+			log.info("Received request to add airline details : {}", airline);
 			response = airlineService.saveAirlines(airline);
 		}
 		catch(Exception e)
 		{
+			log.error("Add airlines operation failed with reason - {}", e.getMessage());
 			response = new Response<>(ResponseStatusCode.ERROR, e.getMessage(), null);
-			log.error("", e);
+
+		}
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@CrossOrigin
+	@RequestMapping(value = "/details", method = RequestMethod.PUT)
+	public ResponseEntity<Response> updateAirline(
+		@Valid
+		@RequestBody
+		Airline airline)
+	{
+		Response response;
+		try
+		{
+
+			if(airline.getAirlineId() == 0)
+				throw new Exception("Airline id is missing");
+			log.info("Received request to update airline details : {}", airline);
+			response = airlineService.saveAirlines(airline);
+		}
+		catch(Exception e)
+		{
+			log.error("Update airlines operation failed with reason - {}", e.getMessage());
+			response = new Response<>(ResponseStatusCode.ERROR, e.getMessage(), null);
 		}
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -63,12 +89,13 @@ public class AirlineController
 		Response response;
 		try
 		{
+			log.info("Received request to update airline seat details : {}", seatList);
 			response = airlineService.addSeats(airlineId, seatList);
 		}
 		catch(Exception e)
 		{
+			log.error("Failed to add seats to airline - {}", e.getMessage());
 			response = new Response<>(ResponseStatusCode.ERROR, e.getMessage(), null);
-			log.error("", e);
 		}
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -81,6 +108,7 @@ public class AirlineController
 		Response response;
 		try
 		{
+			log.info("Received request to fetch airline details for : {}", airlineCode);
 			AirlineView airlineView = airlineService.getAirlineView(airlineCode);
 			if(!Optional.ofNullable(airlineView).isPresent())
 				response = new Response<>(ResponseStatusCode.SUCCESS, "Fetch Success - Record not found", airlineView);
@@ -89,8 +117,8 @@ public class AirlineController
 		}
 		catch(Exception e)
 		{
+			log.error("Failed to fetch airline details - {}", e.getMessage());
 			response = new Response<>(ResponseStatusCode.ERROR, e.getMessage(), null);
-			log.error("", e);
 		}
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

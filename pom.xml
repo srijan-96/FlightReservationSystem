@@ -52,6 +52,16 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.7.0</version>
+		</dependency>
+		<dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen</artifactId>
 		</dependency>
@@ -122,13 +132,6 @@
 						        <goals>
 						            <goal>run</goal>
 						        </goals>
-<!--						        <configuration>-->
-<!--						            <tasks>-->
-<!--							            <delete includeEmptyDirs="true" quiet="true">-->
-<!--					                        <fileset dir="src/main/java/com/capitalfloat/resource_pool/domain/dao"/>-->
-<!--					                    </delete>-->
-<!--						            </tasks>-->
-<!--						        </configuration>-->
 						    </execution>
 						</executions>
 					</plugin>
@@ -168,34 +171,10 @@
 							         | SECRET_ROUTINE              # This routine (unqualified name) ...
 							        </excludes>
 								    <schemata>
-									    <!--schema>
-									        <inputSchema>cf_resource_pool</inputSchema>
-									    </schema-->
 									    <schema>
 								            <inputSchema>flight_reservation</inputSchema>
 								        </schema>
 									</schemata>
-
-<!--			                        <forcedTypes>-->
-<!--										<forcedType>-->
-<!--										 <userType>com.fasterxml.jackson.databind.JsonNode</userType>-->
-<!--										  <binding>com.capitalfloat.resource_pool.config.JooqPostgresJsonBJacksonBinding</binding>-->
-<!--										  <expression>.*JSONB</expression>-->
-<!--										  <types>.*</types>-->
-<!--										</forcedType>-->
-<!--										<forcedType>-->
-<!--										 <userType>java.util.Set&lt;Integer&gt;</userType>-->
-<!--										  <binding>com.capitalfloat.resource_pool.config.JooqPostgresJsonBJacksonIntegerArrayBinding</binding>-->
-<!--										  <expression>flight_reservation.business_entity.services_provided</expression>-->
-<!--										  <types>.*</types>-->
-<!--										</forcedType>-->
-<!--										<forcedType>-->
-<!--										 <userType>java.util.Set&lt;Long&gt;</userType>-->
-<!--										  <binding>com.capitalfloat.resource_pool.config.JooqPostgresJsonBJacksonArrayBinding</binding>-->
-<!--										  <expression>flight_reservation.metadata.tags</expression>-->
-<!--										  <types>.*</types>-->
-<!--										</forcedType>-->
-<!--			                        </forcedTypes>-->
 		                        </database>
 
 							    <generate>

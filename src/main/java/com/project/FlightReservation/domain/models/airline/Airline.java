@@ -1,4 +1,4 @@
-package com.project.FlightReservation.domain.models;
+package com.project.FlightReservation.domain.models.airline;
 
 import lombok.Getter;
 import lombok.Setter;

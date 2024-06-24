@@ -1,10 +1,8 @@
-package com.project.FlightReservation.domain.models;
+package com.project.FlightReservation.domain.models.schedule;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 @Setter
 @Getter
