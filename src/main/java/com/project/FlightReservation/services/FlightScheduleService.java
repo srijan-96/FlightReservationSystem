@@ -11,12 +11,13 @@ import org.springframework.stereotype.Service;
 import com.project.FlightReservation.constants.FlightScheduleFrequencyType;
 import com.project.FlightReservation.constants.ResponseStatusCode;
 import com.project.FlightReservation.domain.dao.enums.FlightStatus;
+import com.project.FlightReservation.domain.models.schedule.FlightSchedule;
 import com.project.FlightReservation.domain.models.schedule.FlightScheduleRequest;
 import com.project.FlightReservation.domain.models.schedule.FlightScheduleView;
 import com.project.FlightReservation.domain.models.Response;
 import com.project.FlightReservation.domain.models.airline.Seat;
 import com.project.FlightReservation.domain.repository.FlightScheduleRepository;
-import com.project.FlightReservation.exceptions.InvalidPayloadException;
+import com.project.FlightReservation.exceptions.InvalidDataException;
 
 @Service
 public class FlightScheduleService
@@ -24,8 +25,6 @@ public class FlightScheduleService
 
 	@Autowired
 	FlightScheduleRepository flightScheduleRepository;
-	@Autowired
-	PricingService pricingService;
 
 	public Response createSchedule(FlightScheduleRequest flightScheduleRequest)
 	{
@@ -34,7 +33,10 @@ public class FlightScheduleService
 		OffsetDateTime currentDate = flightScheduleRequest.getDepartureDatetime();
 		OffsetDateTime endDate = flightScheduleRequest.getEndDate();
 		if(currentDate.isBefore(OffsetDateTime.now()))
-			throw new InvalidPayloadException("Departure datetime is in the past - Not allowed");
+			throw new InvalidDataException("Departure datetime is in the past - Not allowed");
+
+		if(flightScheduleRequest.getDepartureDatetime().isAfter(flightScheduleRequest.getArrivalDatetime()))
+			throw new InvalidDataException("Arrival datetime is before Departure time - Not allowed");
 
 		if(flightScheduleRequest.getFlightScheduleFrequencyType() == FlightScheduleFrequencyType.NA)
 		{
@@ -44,7 +46,7 @@ public class FlightScheduleService
 		else
 		{
 			if(currentDate.isAfter(endDate))
-				throw new InvalidPayloadException("End date cannot be before current date");
+				throw new InvalidDataException("End date cannot be before current date");
 			while(!currentDate.isAfter(endDate))
 			{
 				if(flightScheduleRequest.getFlightScheduleFrequencyType() == FlightScheduleFrequencyType.DAILY)
@@ -88,6 +90,12 @@ public class FlightScheduleService
 	public List<Seat> getAvailableSeats(long flightScheduleId)
 	{
 		return flightScheduleRepository.getAvailableSeats(flightScheduleId);
+	}
+
+	public Response updateSchedule(FlightSchedule flightSchedule)
+	{
+		flightScheduleRepository.updateSchedule(flightSchedule, flightSchedule.getFlightScheduleId());
+		return new Response<>(ResponseStatusCode.SUCCESS, "Flight schedule updated successfully", null);
 	}
 
 }

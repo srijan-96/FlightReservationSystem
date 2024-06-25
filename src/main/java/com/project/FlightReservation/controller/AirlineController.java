@@ -57,7 +57,6 @@ public class AirlineController
 	@CrossOrigin
 	@RequestMapping(value = "/details", method = RequestMethod.PUT)
 	public ResponseEntity<Response> updateAirline(
-		@Valid
 		@RequestBody
 		Airline airline)
 	{

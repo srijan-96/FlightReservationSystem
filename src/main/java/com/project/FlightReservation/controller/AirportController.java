@@ -55,7 +55,6 @@ public class AirportController
 	@RequestMapping(value = "/details", method = RequestMethod.PUT)
 	public ResponseEntity<Response> updateAirport(
 		@RequestBody
-		@Valid
 		Airport airport)
 	{
 		Response response;

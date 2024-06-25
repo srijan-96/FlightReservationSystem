@@ -9,7 +9,6 @@ import static com.project.FlightReservation.domain.dao.Tables.SEAT_PRICING;
 import static org.jooq.impl.DSL.day;
 import static org.jooq.impl.DSL.month;
 import static org.jooq.impl.DSL.year;
-
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.jooq.UpdateSetMoreStep;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -28,6 +28,7 @@ import org.springframework.stereotype.Repository;
 import com.project.FlightReservation.domain.dao.tables.records.FlightScheduleRecord;
 import com.project.FlightReservation.domain.models.airline.AirlineView;
 import com.project.FlightReservation.domain.models.airline.Airport;
+import com.project.FlightReservation.domain.models.schedule.FlightSchedule;
 import com.project.FlightReservation.domain.models.schedule.FlightScheduleRequest;
 import com.project.FlightReservation.domain.models.schedule.FlightScheduleView;
 import com.project.FlightReservation.domain.models.airline.Seat;
@@ -164,6 +165,41 @@ public class FlightScheduleRepository
 			where(FLIGHT_SCHEDULE.FLIGHT_SCHEDULE_ID.eq(flightScheduleId)).
 			and(BOOKINGS.SEAT_ID.isNull()).
 			fetchInto(Seat.class);
+	}
+
+	public void updateSchedule(FlightSchedule flightSchedule, long flightScheduleId)
+	{
+		Condition condition = FLIGHT_SCHEDULE.FLIGHT_SCHEDULE_ID.equal(flightScheduleId);
+		UpdateSetMoreStep<?> updateQuery = (UpdateSetMoreStep<?>) DSL.using(dsl.configuration()).update(FLIGHT_SCHEDULE);
+		if(flightSchedule.getAirlineId() != 0)
+		{
+			updateQuery.set(FLIGHT_SCHEDULE.AIRLINE_ID, flightSchedule.getAirlineId());
+		}
+		if(flightSchedule.getFromAirport() != 0)
+		{
+			updateQuery.set(FLIGHT_SCHEDULE.FROM_AIRPORT, flightSchedule.getFromAirport());
+		}
+		if(flightSchedule.getToAirport() != 0)
+		{
+			updateQuery.set(FLIGHT_SCHEDULE.TO_AIRPORT, flightSchedule.getToAirport());
+		}
+		if(Optional.ofNullable(flightSchedule.getStatus()).isPresent())
+		{
+			updateQuery.set(FLIGHT_SCHEDULE.STATUS, flightSchedule.getStatus());
+		}
+		if(Optional.ofNullable(flightSchedule.getDepartureDatetime()).isPresent())
+		{
+			updateQuery.set(FLIGHT_SCHEDULE.DEPARTURE_DATETIME, flightSchedule.getDepartureDatetime());
+		}
+		if(Optional.ofNullable(flightSchedule.getArrivalDatetime()).isPresent())
+		{
+			updateQuery.set(FLIGHT_SCHEDULE.ARRIVAL_DATETIME, flightSchedule.getArrivalDatetime());
+		}
+		if(Optional.ofNullable(flightSchedule.getBasePrice()).isPresent())
+		{
+			updateQuery.set(FLIGHT_SCHEDULE.BASE_PRICE, flightSchedule.getBasePrice());
+		}
+		updateQuery.where(condition).execute();
 	}
 
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.FlightReservation.constants.ResponseStatusCode;
+import com.project.FlightReservation.domain.models.schedule.FlightSchedule;
 import com.project.FlightReservation.domain.models.schedule.FlightScheduleRequest;
 import com.project.FlightReservation.domain.models.schedule.FlightScheduleView;
 import com.project.FlightReservation.domain.models.Response;
@@ -67,10 +68,33 @@ public class FlightScheduleController
 	}
 
 	@CrossOrigin
+	@RequestMapping(value = "/schedule", method = RequestMethod.PUT)
+	public ResponseEntity<Response> updateSchedule(
+		@RequestBody
+		FlightSchedule flightSchedule)
+	{
+		Response response;
+		try
+		{
+			if(flightSchedule.getFlightScheduleId() == 0)
+				throw new Exception("Flight schedule id is missing");
+			log.info("Received request to update schedule with details : {}", flightSchedule);
+			response = flightScheduleService.updateSchedule(flightSchedule);
+		}
+		catch(Exception e)
+		{
+			log.error("Exception in updating schedule - {}", e.getMessage());
+			response = new Response<>(ResponseStatusCode.ERROR, e.getMessage(), null);
+		}
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@CrossOrigin
 	@RequestMapping(value = "/{flightScheduleId}/pricing", method = RequestMethod.POST)
 	public ResponseEntity<Response> addPricing(@PathVariable("flightScheduleId")
 	long flightScheduleId,
 		@RequestBody
+		@Valid
 		SeatPricing seatPricing)
 	{
 		Response response;

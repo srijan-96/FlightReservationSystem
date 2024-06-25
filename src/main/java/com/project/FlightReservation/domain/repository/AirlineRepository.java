@@ -13,6 +13,7 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.jooq.UpdateSetMoreStep;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -38,7 +39,16 @@ public class AirlineRepository
 		else
 		{
 			Condition condition = AIRLINES.AIRLINE_ID.equal(model.getAirlineId());
-			return DSL.using(dsl.configuration()).update(AIRLINES).set(AIRLINES.AIRLINE_CODE, model.getAirlineCode()).set(AIRLINES.NAME, model.getName()).where(condition).execute();
+			UpdateSetMoreStep<?> updateQuery = (UpdateSetMoreStep<?>) DSL.using(dsl.configuration()).update(AIRLINES);
+			if(Optional.ofNullable(model.getAirlineCode()).isPresent())
+			{
+				updateQuery.set(AIRLINES.AIRLINE_CODE, model.getAirlineCode());
+			}
+			if(Optional.ofNullable(model.getName()).isPresent())
+			{
+				updateQuery.set(AIRLINES.NAME, model.getName());
+			}
+			return updateQuery.where(condition).execute();
 		}
 	}
 

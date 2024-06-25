@@ -19,7 +19,7 @@ CREATE TABLE flight_reservation.airport
   airport_code text,
   latitude numeric(20,18),
   longitude numeric(20,18),
-  CONSTRAINT airport_pk PRIMARY KEY (airport_id)
+  CONSTRAINT airport_pk PRIMARY KEY (airport_id),
   CONSTRAINT airport_unique UNIQUE (airport_code)
 );
 
@@ -43,6 +43,7 @@ CREATE TABLE flight_reservation.flight_schedule
    CONSTRAINT flight_schedule_airline_fk FOREIGN KEY (airline_id)
             REFERENCES flight_reservation.airlines (airline_id)
             MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+
   );
 
  CREATE TABLE flight_reservation.seat_pricing
@@ -53,7 +54,8 @@ CREATE TABLE flight_reservation.flight_schedule
     economy_price text not null,
     first_class_price text not null,
     CONSTRAINT seat_pricing_pk PRIMARY KEY (seat_pricing_id),
-     CONSTRAINT flight_schedule_fk FOREIGN KEY (flight_schedule_id)
+    CONSTRAINT unique_flight_schedule_id UNIQUE (flight_schedule_id),
+    CONSTRAINT flight_schedule_fk FOREIGN KEY (flight_schedule_id)
         REFERENCES flight_reservation.flight_schedule (flight_schedule_id)
         MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
  );
@@ -83,5 +85,12 @@ CREATE TYPE flight_reservation.booking_status AS ENUM ('INITIATED' , 'PENDING' ,
      booking_time timestamp with time zone not null default now(),
      CONSTRAINT flight_seat_unique UNIQUE (flight_id, seat_id),
      CONSTRAINT booking_pk PRIMARY KEY (id),
-     CONSTRAINT booking_id_unique UNIQUE (booking_id, seat_id)
+     CONSTRAINT booking_id_unique UNIQUE (booking_id, seat_id),
+     CONSTRAINT booking_flight_fk FOREIGN KEY (flight_id)
+                   REFERENCES flight_reservation.flight_schedule (flight_schedule_id)
+                   MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO action,
+     CONSTRAINT booking_seat_fk FOREIGN KEY (seat_id)
+                   REFERENCES flight_reservation.seats (seat_id)
+                   MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
  );
+

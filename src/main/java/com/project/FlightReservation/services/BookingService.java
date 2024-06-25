@@ -8,7 +8,7 @@ import com.project.FlightReservation.domain.models.booking.BookingView;
 import com.project.FlightReservation.domain.models.booking.Bookings;
 import com.project.FlightReservation.domain.models.Response;
 import com.project.FlightReservation.domain.repository.BookingRepository;
-import com.project.FlightReservation.exceptions.InvalidPayloadException;
+import com.project.FlightReservation.exceptions.InvalidDataException;
 
 @Service
 public class BookingService
@@ -18,10 +18,8 @@ public class BookingService
 
 	public Response createBooking(Bookings bookings)
 	{
-
 		if(bookingRepository.isDuplicateBooking(bookings.getBookingId()))
-			throw new InvalidPayloadException("Booking reference id already present. Please check your current bookings.");
-
+			throw new InvalidDataException("Booking reference id already present. Please check your current bookings.");
 		bookingRepository.bookFlights(bookings);
 		return new Response<>(ResponseStatusCode.SUCCESS, "Booking details added successfully", null);
 
