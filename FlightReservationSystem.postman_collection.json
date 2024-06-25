@@ -1,0 +1,439 @@
+{
+	"info": {
+		"_postman_id": "5845e3ab-a6b5-47c1-9ebf-71ceea2bd686",
+		"name": "Flight Reservation System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30039814"
+	},
+	"item": [
+		{
+			"name": "airline details",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Air India\",\n    \"airlineCode\" : \"AI-546\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/airlines/details",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"airlines",
+						"details"
+					]
+				},
+				"description": "This endpoint allows you to add details of airlines via an HTTP POST request to localhost:8080/airlines/details.\n\n### Request Body\n\nThe request should include a raw JSON payload with the following parameters:\n\n- `name` (string, mandatory): The name of the airline.\n    \n- `airlineCode` (string, mandatory): The airline code.\n    \n\n### Response\n\nThe response will be in JSON format with the following schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Airline added/updated successfully\"\n}\n\n ```\n\nThe response will have a `statusCode` indicating the status of the request, a `status` message, and a `message` providing additional information."
+			},
+			"response": []
+		},
+		{
+			"name": "airline seats",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"seatType\": \"BUSINESS\",\n        \"seatNo\": \"A32\"\n    },\n    {\n        \"seatType\": \"ECONOMY\",\n        \"seatNo\": \"C12\"\n    },\n    {\n        \"seatType\": \"FIRST_CLASS\",\n        \"seatNo\": \"D3\"\n    },\n    {\n        \"seatType\": \"BUSINESS\",\n        \"seatNo\": \"E4\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/airlines/3/seats",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"airlines",
+						"3",
+						"seats"
+					]
+				},
+				"description": "The endpoint is a POST request that is used to add seats for a specific airline. The request should include a payload in the raw request body with the following parameters:\n\n- `seatType` (string, mandatory) : Type of the seat\n    \n- `seatNo` (string, mandatory) : Seat number\n    \n\nPath paramteter is `airlineId`\n\nThe response to this request will have a status code of 200 and a content type of `application/json`. The response body will include the following parameters:\n\n- `statusCode` (number): Status code of the response\n    \n- `status` (string): Status message\n    \n- `message` (string): Additional message related to the response"
+			},
+			"response": []
+		},
+		{
+			"name": "airline view",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/airlines/view/6E-967",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"airlines",
+						"view",
+						"6E-967"
+					]
+				},
+				"description": "### Request Description\n\nThis endpoint makes an HTTP GET request to view details of a specific airline with the given airline code.\n\n### Request Body\n\nThis request does not require a request body.\n\n**Path Paramters**  \n`airlineCode` as the path parameter\n\n### Response Body\n\nThe response is in JSON format and has the following schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": {\n        \"airlineId\": 1,\n        \"name\": \"Indigo - X\",\n        \"airlineCode\": \"6E-555\",\n        \"seatList\": [\n            {\n                \"seatId\": 1,\n                \"airlineRefId\": 1,\n                \"seatType\": \"BUSINESS\",\n                \"seatNo\": \"A5\"\n            },\n            {\n                \"seatId\": 2,\n                \"airlineRefId\": 1,\n                \"seatType\": \"ECONOMY\",\n                \"seatNo\": \"B21\"\n            },\n            {\n                \"seatId\": 3,\n                \"airlineRefId\": 1,\n                \"seatType\": \"FIRST_CLASS\",\n                \"seatNo\": \"C4\"\n            }\n        ]\n    }\n}\n\n ```\n\nAirline along with seat details is returned in response"
+			},
+			"response": []
+		},
+		{
+			"name": "airline details",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"airlineId\" : 4,\n    \"name\": \"Air India EX\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/airlines/details",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"airlines",
+						"details"
+					]
+				},
+				"description": "### Update Airline Details\n\nThis endpoint allows the client to update the details of an airline.\n\n**Request Body**\n\n- `name` (string, optional): The updated name of airlin\n    \n- `airlineCode` (string, optional): The updated value of airline code\n    \n- `airlineId` (long, required) : The airline id to uniquely identify the airline.\n    \n\n**Response**\n\n- Status: 200\n    \n- Content-Type: application/json\n    \n\nExample response body:\n\n``` json\n{\n    \"statusCode\": -1,\n    \"status\": \"Error\",\n    \"message\": \"Airline id is missing\"\n}\n\n ```\n\nSample error Response"
+			},
+			"response": []
+		},
+		{
+			"name": "airport details",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Delhi International Airport\",\n    \"airportCode\": \"DU-IX\",\n    \"latitude\": 10.4,\n    \"longitude\": 15.4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/airport/details",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"airport",
+						"details"
+					]
+				},
+				"description": "The `POST /airport/details` endpoint is used to add details of an airport.\n\n### Request Body\n\n- The request body should be in raw JSON format and include the following parameters:\n    \n    - `name` (string, mandatory): The name of the airport.\n        \n    - `airportCode` (string, mandatory): The code assigned to the airport.\n        \n    - `latitude` (number, mandatory): The latitude coordinates of the airport.\n        \n    - `longitude` (number, mandatory): The longitude coordinates of the airport.\n        \n\n### Response\n\nThe response is a JSON object with the following schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Airport added/updated successfully\"\n}\n\n ```\n\nThe response object includes the following properties:\n\n- `statusCode` (number): The status code of the response.\n    \n- `status` (string): The status of the response.\n    \n- `message` (string): Additional information or message related to the response."
+			},
+			"response": []
+		},
+		{
+			"name": "airport details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/airport/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"airport",
+						"2"
+					]
+				},
+				"description": "### Request Description\n\nThis endpoint makes an HTTP GET request to view details of a specific airport with the given airport id.\n\n### Request Body\n\nThis request does not require a request body.\n\n**Path Paramters**  \n`airportId` as the path parameter\n\n### Response Body\n\nThe response is in JSON format and has the following schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": {\n        \"airportId\": 1,\n        \"name\": \"Indigo\",\n        \"airportCode\": \"CU\",\n        \"latitude\": 10.4,\n        \"longitude\": 15.4\n    }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "airport details",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"airportId\" : 2,\n    \"airportCode\": \"BNG_123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/airport/details",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"airport",
+						"details"
+					]
+				},
+				"description": "### Update Airport Details\n\nThis endpoint is used to update the details of an airport.\n\n#### Request Body\n\n- `airportId` (number, required): The unique identifier of the airport.\n    \n- `name` (string, optional): The name of the airport.\n    \n- `airportCode` (string, optional): The code assigned to the airport.\n    \n- `latitude` (number, optional): The latitude coordinate of the airport location.\n    \n- `longitude` (number, optional): The longitude coordinate of the airport location.\n    \n\n#### Response\n\nUpon a successful update, the server will respond with a status code of 200 and a JSON object containing the following fields:\n\n- `statusCode` (number): The status code of the response.\n    \n- `status` (string): The status message.\n    \n- `message` (string): Additional information or message.\n    \n\nExample response body:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Airport added/updated successfully\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "flight schedule",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"airlineId\": 3,\n    \"toAirport\": 1,\n    \"fromAirport\": 2,\n    \"departureDatetime\": \"2024-07-05T06:15:08.721Z\",\n    \"arrivalDatetime\": \"2024-07-05T05:45:08.721Z\",\n    \"basePrice\" : \"456\",\n    \"flightScheduleFrequencyType\" : \"WEEKLY\",\n    \"endDate\": \"2024-07-20T01:40:08.721Z\",\n    \"daysOFWeek\" : [\"WEDNESDAY\", \"THURSDAY\"]\n}   ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/flight/schedule",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"flight",
+						"schedule"
+					]
+				},
+				"description": "### Flight Schedule\n\nThis endpoint allows you to schedule a new flight/flights.\n\n#### Request Body\n\n- `airlineId` (number, mandatory): The ID of the airline.\n    \n- `toAirport` (number, mandatory): The ID of the destination airport.\n    \n- `fromAirport` (number, mandatory): The ID of the departure airport.\n    \n- `departureDatetime` (string, mandatory): The date and time of departure.\n    \n- `arrivalDatetime` (string, mandatory): The date and time of arrival.\n    \n- `basePrice` (text, mandatory): The base price of the flight.\n    \n- `flightScheduleFrequencyType` (string, mandatory): The frequency type of the flight schedule.  \n    Possible values :`[\"DAILY\", \"WEEKLY\", \"NA\"]`\n    \n- `endDate` (string, optional): The end date of the flight schedule. Applicable if `flightScheduleFrequencyType` is **not NA**\n    \n- `daysOFWeek` (array of strings, optional): The days of the week for the flight schedule. Applicable for **WEEKLY** `flightScheduleFrequencyType`\n    \n\n#### Response\n\n- `statusCode` (number): The status code of the response.\n    \n- `status` (string): The status of the response.\n    \n- `message` (string): Additional message from the server.\n    \n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Flight schedules added successfully\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "flight shedule",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"flightScheduleId\": 3,\n    \"status\": \"BOARDING\",\n    \"airlineId\": 3,\n    \"toAirport\": 1,\n    \"fromAirport\": 2,\n    \"departureDatetime\": \"2024-07-03T11:15:08.721Z\",\n    \"arrivalDatetime\": \"2024-07-05T09:45:08.721Z\",\n    \"basePrice\": \"456.67\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/flight/schedule",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"flight",
+						"schedule"
+					]
+				},
+				"description": "### Flight Schedule\n\nThis endpoint allows you to update schedule for a flight\n\n#### Request Body\n\n- `flightScheduleId` (number, mandatory): The ID to uniquely identify the flight schedule.\n    \n- `airlineId` (number, optional): The ID of the airline.\n    \n- `toAirport` (number, optional): The ID of the destination airport.\n    \n- `status` (text, optional): Status of the flight. Allowed values \\[**SCHEDULED', 'BOARDING', 'SECURITY', 'DELAYED', 'REACHED', 'IN_TRANSIT', 'CANCELLED'**\\]\n    \n- `fromAirport` (number, optional): The ID of the departure airport.\n    \n- `departureDatetime` (string, optional): The date and time of departure.\n    \n- `arrivalDatetime` (string, optional): The date and time of arrival.\n    \n- `basePrice` (text, optional): The base price of the flight.\n    \n\n#### Response\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Flight schedule updated successfully\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "seat pricing",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"businessPrice\": \"200\",\n    \"economyPrice\": \"150\",\n    \"firstClassPrice\": \"500\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/flight/7/pricing",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"flight",
+						"7",
+						"pricing"
+					]
+				},
+				"description": "### Flight Pricing\n\nThis endpoint allows the user to update the pricing for different classes of a specific flight schedule.\n\n#### Request Body\n\n- `businessPrice` (text, mandatory): The price for the business class of the flight.\n    \n- `economyPrice` (text, mandatory): The price for the economy class of the flight.\n    \n- `firstClassPrice` (text, mandatory): The price for the first class of the flight.\n    \n\n### **Path Paramters**\n\n`flightScheduleId` as the path parameter\n\n#### Response\n\nThe response of this request can be represented as a JSON schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Price details added successfully\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "seat pricing",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"businessPrice\": \"56\",\n    \"economyPrice\": \"34.56\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/flight/2/pricing",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"flight",
+						"2",
+						"pricing"
+					]
+				},
+				"description": "### Update Flight Pricing\n\nThis endpoint is used to update the pricing for a specific flight identified by the ID.\n\n#### Request Body\n\n- `businessPrice` (text, optional): The updated price for the business class.\n    \n- `economyPrice` (text, optional): The updated price for the economy class.\n    \n- `firstClassPrice` (text, optional): The updated price for the first class.\n    \n\n#### Response\n\nUpon a successful update, the endpoint returns a status code of 200 with an empty JSON response."
+			},
+			"response": []
+		},
+		{
+			"name": "flight schedule",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/flight/search?departureDate=2024-06-29T00:00:00Z&sourceAirportCode=DU-IX&minPrice=500&maxPrice=500&airlineName=indigo - x&limit=10&offset=0&destinationAirportCode=XYX1001",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"flight",
+						"search"
+					],
+					"query": [
+						{
+							"key": "departureDate",
+							"value": "2024-06-29T00:00:00Z"
+						},
+						{
+							"key": "sourceAirportCode",
+							"value": "DU-IX"
+						},
+						{
+							"key": "minPrice",
+							"value": "500"
+						},
+						{
+							"key": "maxPrice",
+							"value": "500"
+						},
+						{
+							"key": "airlineName",
+							"value": "indigo - x"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "destinationAirportCode",
+							"value": "XYX1001"
+						}
+					]
+				},
+				"description": "### Flight Search\n\nThis endpoint retrieves flight schedules along with airline, source, destination details based on the provided search criteria.\n\n#### Request\n\n- Method: GET\n    \n- URL: `localhost:8080/flight/search`\n    \n- Query Parameters:\n    \n    - `departureDate` (string): The date of departure in ISO 8601 format.\n        \n    - `sourceAirportCode` (string): The code of the source airport.\n        \n    - `minPrice` (number): The minimum price of the flight.\n        \n    - `maxPrice` (number): The maximum price of the flight.\n        \n    - `airlineName` (string): The name of the airline.\n        \n    - `limit` (number): The maximum number of results to return.\n        \n    - `offset` (number): The offset for paginating through results.\n        \n    - `destinationAirportCode` (string): The code of the destination airport.\n        \n\n#### Response\n\nThe response is in JSON format and follows the schema below:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": [\n        {\n            \"flightScheduleId\": 3,\n            \"airlineId\": 1,\n            \"toAirport\": 1,\n            \"fromAirport\": 2,\n            \"departureDatetime\": \"2024-06-29T11:10:08.721+05:30\",\n            \"arrivalDatetime\": \"2024-06-29T13:10:08.721+05:30\",\n            \"status\": \"SCHEDULED\",\n            \"basePrice\": \"4566\",\n            \"airline\": {\n                \"airlineId\": 1,\n                \"name\": \"Indigo - X\",\n                \"airlineCode\": \"6E-555\"\n            },\n            \"source\": {\n                \"airportId\": 2,\n                \"name\": \"YUUD\",\n                \"airportCode\": \"AND123\",\n                \"latitude\": 10.0,\n                \"longitude\": 12.0\n            },\n            \"destination\": {\n                \"airportId\": 1,\n                \"name\": \"ABC\",\n                \"airportCode\": \"XYX1001\",\n                \"latitude\": 10.0,\n                \"longitude\": 11.0\n            }\n        }\n    ]\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "flight schedule available seats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/flight/9/availableSeats",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"flight",
+						"9",
+						"availableSeats"
+					]
+				},
+				"description": "# Flight Available Seats\n\nThis endpoint retrieves the available seats for a specific flight.\n\n## Request\n\n### Request URL\n\n- Method: GET\n    \n- URL: `localhost:8080/flight/9/availableSeats`\n    \n\n### **Path Paramters**\n\n`flightScheduleId` as the path parameter\n\n## Response\n\n- Status: 200\n    \n- Content-Type: application/json\n    \n\n### Response Body\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": [\n        {\n            \"seatId\": 4,\n            \"airlineRefId\": 2,\n            \"seatType\": \"BUSINESS\",\n            \"seatNo\": \"A5\"\n        },\n        {\n            \"seatId\": 5,\n            \"airlineRefId\": 2,\n            \"seatType\": \"ECONOMY\",\n            \"seatNo\": \"B21\"\n        },\n        {\n            \"seatId\": 7,\n            \"airlineRefId\": 2,\n            \"seatType\": \"BUSINESS\",\n            \"seatNo\": \"A3\"\n        }\n    ]\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "book flight",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"flightId\": 1,\n    \"bookingId\": \"8935c657-568e-67ui-io13-a92dc527ce3f\",\n    \"passengerBookingDetailsList\": [\n        {\n            \"name\": \"Greg goerge\",\n            \"email\": \"344@gmail.com\",\n            \"seatId\": 1\n        },\n         {\n            \"name\": \"Srijan Roy\",\n            \"email\": \"123@gmail.com\",\n            \"seatId\": 4\n        } \n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/booking/details",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"booking",
+						"details"
+					]
+				},
+				"description": "The `POST` request to `/booking/details` endpoint is used to submit booking details including flight ID, booking ID, and passenger details.\n\n### Request Body\n\n- `flightId` (number): The ID of the flight.\n    \n- `bookingId` (string): UUID generated by client.\n    \n- `passengerBookingDetailsList` (array): A list of objects containing passenger details.\n    - `name` (string): The name of the passenger.\n        \n    - `email` (string): The email of the passenger.\n        \n    - `seatId` (number): The ID of the seat booked by the passenger.\n        \n\n### Response\n\nThe response to this request is a JSON object with the following schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Booking details added successfully\"\n}\n\n ```\n\nThe response object contains the `statusCode`, `status`, and `message` properties, which provide information about the status of the request execution."
+			},
+			"response": []
+		},
+		{
+			"name": "flight booking details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/booking/8935c657-568e-67ui-io13-a92dc527ce3f",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"booking",
+						"8935c657-568e-67ui-io13-a92dc527ce3f"
+					]
+				},
+				"description": "### GET /booking/{bookingId}\n\nThis endpoint retrieves the booking details for a specific booking ID.\n\n#### Headers\n\nNo specific headers are required for this request.\n\n#### Parameters\n\n- `bookingId` (path parameter) : The unique identifier for the booking (UUID)\n    \n\n#### Response\n\nUpon a successful request, the server will respond with a status code of 200 and a JSON object containing the booking details. The response will include the following fields:\n\n- `statusCode` : The status code of the response.\n    \n- `status` : The status of the booking.\n    \n- `message` : Any additional message related to the booking.\n    \n- `body` : An object containing the booking details\n    \n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": {\n        \"id\": 13,\n        \"flightId\": 9,\n        \"bookingId\": \"8935c657-568e-67ui-io13-a92dc527ce3f\",\n        \"status\": \"CONFIRMED\",\n        \"passengerBookingDetailsList\": [\n            {\n                \"name\": \"Greg goerge\",\n                \"email\": \"344@gmail.com\",\n                \"seatId\": 6,\n                \"seatNo\": \"C4\"\n            }\n        ],\n        \"airlineName\": \"Indigo\",\n        \"airlineCode\": \"6E-124\",\n        \"sourceAirportCode\": \"AND123\",\n        \"destinationAirportCode\": \"XYX1001\"\n    }\n}\n ```"
+			},
+			"response": []
+		}
+	]
+}
