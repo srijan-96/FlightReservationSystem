@@ -1,8 +1,9 @@
 package com.project.FlightReservation.services;
 
-import javax.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.FlightReservation.constants.ResponseStatusCode;
@@ -15,6 +16,7 @@ import com.project.FlightReservation.domain.repository.BookingRepository;
 import com.project.FlightReservation.exceptions.InvalidDataException;
 
 @Service
+@Slf4j
 public class BookingService
 {
 	@Autowired
@@ -23,14 +25,24 @@ public class BookingService
 	@Autowired
 	EmailService emailService;
 
-	public Response createBooking(Bookings bookings) throws MessagingException
+	@Value("${send.email}")
+	private boolean sendEmail;
+
+	public Response createBooking(Bookings bookings)
 	{
 		if(bookingRepository.isDuplicateBooking(bookings.getBookingId()))
 			throw new InvalidDataException("Booking reference id already present. Please check your current bookings.");
 		bookingRepository.bookFlights(bookings);
-		emailService.sendEmail(bookings.getPassengerBookingDetailsList().get(0).getEmail(), "E-Ticket for booking", generateETicketContent(bookings));
+		try
+		{
+			if(sendEmail)
+				emailService.sendEmail(bookings.getPassengerBookingDetailsList().get(0).getEmail(), "E-Ticket for booking", generateETicketContent(bookings));
+		}
+		catch(Exception ex)
+		{
+			log.error("Booking is confirmed. Exception in sending email - {}", ex.getMessage());
+		}
 		return new Response<>(ResponseStatusCode.SUCCESS, "Booking details added successfully", null);
-
 	}
 
 	private String generateETicketContent(Bookings bookings)

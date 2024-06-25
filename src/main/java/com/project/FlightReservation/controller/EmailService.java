@@ -1,5 +1,7 @@
 package com.project.FlightReservation.controller;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -9,6 +11,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Service
+@Slf4j
 public class EmailService
 {
 
@@ -17,6 +20,7 @@ public class EmailService
 
 	public void sendEmail(String to, String subject, String text) throws MessagingException
 	{
+		log.info("Sending Booking confirmation email to : {}, subject: {}", to, subject);
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
@@ -25,5 +29,7 @@ public class EmailService
 		helper.setText(text, true);
 
 		mailSender.send(message);
+		log.info("Email send successfully");
+
 	}
 }

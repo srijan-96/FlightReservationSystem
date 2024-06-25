@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
-import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +42,6 @@ public class BookingController
 		{
 			log.info("Received request to book flight : {}", bookings.getBookingId());
 			response = bookingService.createBooking(bookings);
-		}
-		catch(MessagingException e)
-		{
-			log.error("Exception in sending email. Booking is confirmed {}", e.getMessage());
-			response = new Response<>(ResponseStatusCode.SUCCESS, "Booking details added successfully", null);
 		}
 		catch(Exception e)
 		{

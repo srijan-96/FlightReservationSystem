@@ -78,6 +78,7 @@ Error Response:
 - Make sure to have **postgres** **maven** and **JAVA 8** installed.
 - Connect to local postgres through any client or cli. Run the following file to generate all the tables required for the service: `src/main/resources/templates/build.sql`
 - In `src/main/resources/application.properties` change the *"datasource configurations"* and *"jOOQ Configuration"* to point to your local postgres database where the tables are created in step 3.
+- If you want to enable email set *"send.email"* property as true. Change the *"spring.mail.username"* and *"spring.mail.password"* as per your account. For password log into your google account and create an app specific password.
 - Build your maven project using: `mvn clean package -DskipTests -Pjooq`
 - If Build is success run the application using: `mvn spring-boot:run` or directly run the `FlightReservationApplication.java class`. It will start the application on port `8080`
 

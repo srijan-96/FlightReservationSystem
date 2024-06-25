@@ -1,5 +1,7 @@
 package com.project.FlightReservation.services;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import com.project.FlightReservation.domain.repository.FlightScheduleRepository;
 import com.project.FlightReservation.exceptions.InvalidDataException;
 
 @Service
+@Slf4j
 public class FlightScheduleService
 {
 
@@ -28,7 +31,6 @@ public class FlightScheduleService
 
 	public Response createSchedule(FlightScheduleRequest flightScheduleRequest)
 	{
-
 		List<FlightScheduleRequest> flightScheduleList = new ArrayList<>();
 		OffsetDateTime currentDate = flightScheduleRequest.getDepartureDatetime();
 		OffsetDateTime endDate = flightScheduleRequest.getEndDate();
@@ -47,6 +49,7 @@ public class FlightScheduleService
 		{
 			if(currentDate.isAfter(endDate))
 				throw new InvalidDataException("End date cannot be before current date");
+			log.info("Creating Daily/Weekly schedule from {}  to {}", currentDate, endDate);
 			while(!currentDate.isAfter(endDate))
 			{
 				if(flightScheduleRequest.getFlightScheduleFrequencyType() == FlightScheduleFrequencyType.DAILY)
