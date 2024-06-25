@@ -1,6 +1,6 @@
 # Flight Reservation System
 
-A rest-api back end to simulate a flight reservation system back-end
+A rest-api back end to simulate a flight reservation system.
 ## Tools Used
 - JAVA 8
 - Spring Boot 2.7
@@ -92,4 +92,10 @@ Error Response:
 - Execute APIs using the postman collection document
 
 
-### Future Enhancements and Features(TO-DO)
+### Future Enhancements and Features (TO-DO)
+- Add Unit Tests.
+- Add kubernetes deployment configs.
+- Add payment gateway integration.
+- Enhance and optimize the search queries as required.
+- Implement distributed locking using redis for concurrent access.Currently, it is handled via code and DB constraints.
+- Feature to edit seat/passenger details in booking

@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "5845e3ab-a6b5-47c1-9ebf-71ceea2bd686",
 		"name": "Flight Reservation System",
+		"description": "A rest-API back end to simulate a flight reservation system.\n\n## Basic Features\n\n- API to add/update and view airline details\n    \n- API to add airline seats\n    \n- API to add a single or multiple flight schedules\n    \n- API to update individual flight schedules\n    \n- API to add/update pricing model for seats for a schedule\n    \n- API to view flight schedules based on search criteria\n    \n- API to view available seats for a flight schedule\n    \n- API to Book a flight\n    \n- API to view booking details",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30039814"
 	},
@@ -82,7 +83,7 @@
 						"6E-967"
 					]
 				},
-				"description": "### Request Description\n\nThis endpoint makes an HTTP GET request to view details of a specific airline with the given airline code.\n\n### Request Body\n\nThis request does not require a request body.\n\n**Path Paramters**  \n`airlineCode` as the path parameter\n\n### Response Body\n\nThe response is in JSON format and has the following schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": {\n        \"airlineId\": 1,\n        \"name\": \"Indigo - X\",\n        \"airlineCode\": \"6E-555\",\n        \"seatList\": [\n            {\n                \"seatId\": 1,\n                \"airlineRefId\": 1,\n                \"seatType\": \"BUSINESS\",\n                \"seatNo\": \"A5\"\n            },\n            {\n                \"seatId\": 2,\n                \"airlineRefId\": 1,\n                \"seatType\": \"ECONOMY\",\n                \"seatNo\": \"B21\"\n            },\n            {\n                \"seatId\": 3,\n                \"airlineRefId\": 1,\n                \"seatType\": \"FIRST_CLASS\",\n                \"seatNo\": \"C4\"\n            }\n        ]\n    }\n}\n\n ```\n\nAirline along with seat details is returned in response"
+				"description": "### GET /airlines/view/{airportCode}\n\nThis endpoint makes an HTTP GET request to view details of a specific airline with the given airline code.\n\n### Request Body\n\nThis request does not require a request body.\n\n**Path Paramters**  \n`airlineCode` as the path parameter\n\n### Response Body\n\nThe response is in JSON format and has the following schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": {\n        \"airlineId\": 1,\n        \"name\": \"Indigo - X\",\n        \"airlineCode\": \"6E-555\",\n        \"seatList\": [\n            {\n                \"seatId\": 1,\n                \"airlineRefId\": 1,\n                \"seatType\": \"BUSINESS\",\n                \"seatNo\": \"A5\"\n            },\n            {\n                \"seatId\": 2,\n                \"airlineRefId\": 1,\n                \"seatType\": \"ECONOMY\",\n                \"seatNo\": \"B21\"\n            },\n            {\n                \"seatId\": 3,\n                \"airlineRefId\": 1,\n                \"seatType\": \"FIRST_CLASS\",\n                \"seatNo\": \"C4\"\n            }\n        ]\n    }\n}\n\n ```\n\nAirline along with seat details is returned in response"
 			},
 			"response": []
 		},
@@ -160,7 +161,7 @@
 						"2"
 					]
 				},
-				"description": "### Request Description\n\nThis endpoint makes an HTTP GET request to view details of a specific airport with the given airport id.\n\n### Request Body\n\nThis request does not require a request body.\n\n**Path Paramters**  \n`airportId` as the path parameter\n\n### Response Body\n\nThe response is in JSON format and has the following schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": {\n        \"airportId\": 1,\n        \"name\": \"Indigo\",\n        \"airportCode\": \"CU\",\n        \"latitude\": 10.4,\n        \"longitude\": 15.4\n    }\n}\n\n ```"
+				"description": "### GET /airport/{airportId}\n\nThis endpoint makes an HTTP GET request to view details of a specific airport with the given airport id.\n\n### Request Body\n\nThis request does not require a request body.\n\n**Path Paramters**  \n`airportId` as the path parameter\n\n### Response Body\n\nThe response is in JSON format and has the following schema:\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": {\n        \"airportId\": 1,\n        \"name\": \"Indigo\",\n        \"airportCode\": \"CU\",\n        \"latitude\": 10.4,\n        \"longitude\": 15.4\n    }\n}\n\n ```"
 			},
 			"response": []
 		},
@@ -307,7 +308,7 @@
 						"pricing"
 					]
 				},
-				"description": "### Update Flight Pricing\n\nThis endpoint is used to update the pricing for a specific flight identified by the ID.\n\n#### Request Body\n\n- `businessPrice` (text, optional): The updated price for the business class.\n    \n- `economyPrice` (text, optional): The updated price for the economy class.\n    \n- `firstClassPrice` (text, optional): The updated price for the first class.\n    \n\n#### Response\n\nUpon a successful update, the endpoint returns a status code of 200 with an empty JSON response."
+				"description": "### Update Flight Pricing\n\nThis endpoint is used to update the pricing for a specific flight identified by the ID.\n\n### **Path Paramters**\n\n`flightScheduleId` as the path parameter\n\n#### Request Body\n\n- `businessPrice` (text, optional): The updated price for the business class.\n    \n- `economyPrice` (text, optional): The updated price for the economy class.\n    \n- `firstClassPrice` (text, optional): The updated price for the first class.\n    \n\n#### Response\n\nUpon a successful update, the endpoint returns a status code of 200 with an empty JSON response."
 			},
 			"response": []
 		},
@@ -382,7 +383,7 @@
 						"availableSeats"
 					]
 				},
-				"description": "# Flight Available Seats\n\nThis endpoint retrieves the available seats for a specific flight.\n\n## Request\n\n### Request URL\n\n- Method: GET\n    \n- URL: `localhost:8080/flight/9/availableSeats`\n    \n\n### **Path Paramters**\n\n`flightScheduleId` as the path parameter\n\n## Response\n\n- Status: 200\n    \n- Content-Type: application/json\n    \n\n### Response Body\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": [\n        {\n            \"seatId\": 4,\n            \"airlineRefId\": 2,\n            \"seatType\": \"BUSINESS\",\n            \"seatNo\": \"A5\"\n        },\n        {\n            \"seatId\": 5,\n            \"airlineRefId\": 2,\n            \"seatType\": \"ECONOMY\",\n            \"seatNo\": \"B21\"\n        },\n        {\n            \"seatId\": 7,\n            \"airlineRefId\": 2,\n            \"seatType\": \"BUSINESS\",\n            \"seatNo\": \"A3\"\n        }\n    ]\n}\n\n ```"
+				"description": "### GET /flight/{flightScheduleId}/availableSeats\n\nThis endpoint retrieves the available seats for a specific flight.\n\n## Request\n\n### Request URL\n\n- Method: GET\n    \n- URL: `localhost:8080/flight/9/availableSeats`\n    \n\n### **Path Paramters**\n\n`flightScheduleId` as the path parameter\n\n## Response\n\n- Status: 200\n    \n- Content-Type: application/json\n    \n\n### Response Body\n\n``` json\n{\n    \"statusCode\": 1,\n    \"status\": \"Success\",\n    \"message\": \"Fetch Success\",\n    \"body\": [\n        {\n            \"seatId\": 4,\n            \"airlineRefId\": 2,\n            \"seatType\": \"BUSINESS\",\n            \"seatNo\": \"A5\"\n        },\n        {\n            \"seatId\": 5,\n            \"airlineRefId\": 2,\n            \"seatType\": \"ECONOMY\",\n            \"seatNo\": \"B21\"\n        },\n        {\n            \"seatId\": 7,\n            \"airlineRefId\": 2,\n            \"seatType\": \"BUSINESS\",\n            \"seatNo\": \"A3\"\n        }\n    ]\n}\n\n ```"
 			},
 			"response": []
 		},
