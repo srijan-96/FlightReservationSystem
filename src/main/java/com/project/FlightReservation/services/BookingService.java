@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.FlightReservation.constants.ResponseStatusCode;
-import com.project.FlightReservation.controller.EmailService;
 import com.project.FlightReservation.domain.models.booking.BookingView;
 import com.project.FlightReservation.domain.models.booking.Bookings;
 import com.project.FlightReservation.domain.models.Response;

@@ -1,4 +1,4 @@
-package com.project.FlightReservation.controller;
+package com.project.FlightReservation.services;
 
 import lombok.extern.slf4j.Slf4j;
 
