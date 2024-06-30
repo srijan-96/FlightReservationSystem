@@ -10,6 +10,7 @@ import static org.jooq.impl.DSL.select;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.project.FlightReservation.exceptions.PaymentFailedException;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -30,54 +31,6 @@ public class BookingRepository
 {
 	@Autowired
 	DSLContext dsl;
-
-	public void bookFlights(Bookings booking)
-	{
-		String bookingId = booking.getBookingId();
-		Long flightId = booking.getFlightId();
-		try
-		{
-			dsl.transaction(configuration -> {
-				DSLContext ctx = DSL.using(configuration);
-
-				for(PassengerBookingDetails passengerBookingDetails : booking.getPassengerBookingDetailsList())
-				{
-					// Check if the seat is already booked
-					boolean seatExists = ctx.fetchExists(ctx.selectFrom(BOOKINGS).where(BOOKINGS.FLIGHT_ID.eq(flightId)).and(BOOKINGS.SEAT_ID.eq(passengerBookingDetails.getSeatId())));
-
-					if(seatExists)
-					{
-						throw new SeatNotAvailableException("Seat " + passengerBookingDetails.getSeatId() + " is already booked");
-					}
-
-					// Mock payment processing
-					boolean paymentSuccessful = processPayment();
-
-					if(paymentSuccessful)
-					{
-						// Create booking record
-						BookingsRecord bookingRecord = ctx.newRecord(BOOKINGS);
-						bookingRecord.setBookingId(bookingId);
-						bookingRecord.setFlightId(flightId);
-						bookingRecord.setPassengerName(passengerBookingDetails.getName());
-						bookingRecord.setPassengerEmail(passengerBookingDetails.getEmail());
-						bookingRecord.setSeatId(passengerBookingDetails.getSeatId());
-						bookingRecord.setStatus(BookingStatus.CONFIRMED);  // Assuming successful payment
-
-						int insertedRows = ctx.insertInto(BOOKINGS).set(bookingRecord).execute();
-						if(insertedRows == 0)
-						{
-							throw new SeatNotAvailableException("The seat " + passengerBookingDetails.getSeatId() + " is no longer available. Please try booking a different seat.");
-						}
-					}
-				}
-			});
-		}
-		catch(DuplicateKeyException e)
-		{
-			throw new SeatNotAvailableException("One or more seats are no longer available. Please try booking different seats.");
-		}
-	}
 
 	private boolean processPayment()
 	{
@@ -136,6 +89,55 @@ public class BookingRepository
 			return bookingView;
 		}
 		return null;
+	}
+
+	public void bookFlights(Bookings booking)
+	{
+		String bookingId = booking.getBookingId();
+		Long flightId = booking.getFlightId();
+		try
+		{
+			dsl.transaction(configuration -> {
+				DSLContext ctx = DSL.using(configuration);
+
+				for (PassengerBookingDetails passengerBookingDetails : booking.getPassengerBookingDetailsList())
+				{
+					// Check if the seat is already booked
+					boolean seatExists = ctx.fetchExists(ctx.selectFrom(BOOKINGS).where(BOOKINGS.FLIGHT_ID.eq(flightId)).and(BOOKINGS.SEAT_ID.eq(passengerBookingDetails.getSeatId())));
+					if (seatExists)
+					{
+						throw new SeatNotAvailableException("Seat " + passengerBookingDetails.getSeatId() + " is already booked");
+					}
+					// Create booking record
+					BookingsRecord bookingRecord = ctx.newRecord(BOOKINGS);
+					bookingRecord.setBookingId(bookingId);
+					bookingRecord.setFlightId(flightId);
+					bookingRecord.setPassengerName(passengerBookingDetails.getName());
+					bookingRecord.setPassengerEmail(passengerBookingDetails.getEmail());
+					bookingRecord.setSeatId(passengerBookingDetails.getSeatId());
+					bookingRecord.setStatus(BookingStatus.PENDING);  // Initial booking status pending
+
+					int insertedRows = ctx.insertInto(BOOKINGS).set(bookingRecord).execute();
+					if (insertedRows == 0) {
+						throw new SeatNotAvailableException("The seat " + passengerBookingDetails.getSeatId() + " is no longer available. Please try booking a different seat.");
+					}
+				}
+			});
+			boolean paymentSuccessful = processPayment();
+			if (paymentSuccessful)
+				updateBookingStatus(BookingStatus.CONFIRMED, bookingId);
+			else
+				throw new PaymentFailedException("Payment failed. Booking is pending - please retry");
+		}
+		catch (DuplicateKeyException e)
+		{
+			throw new SeatNotAvailableException("One or more seats are no longer available. Please try booking different seats.");
+		}
+	}
+
+	public void updateBookingStatus(BookingStatus bookingStatus, String bookingId)
+	{
+		DSL.using(dsl.configuration()).update(BOOKINGS).set(BOOKINGS.STATUS, bookingStatus).where(BOOKINGS.BOOKING_ID.eq(bookingId)).execute();
 	}
 }
 
